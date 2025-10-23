@@ -14,11 +14,16 @@ export const useSocketStore = create((set, get) => ({
     
     set({ connectionStatus: 'connecting' });
     
-    // Get backend URL from environment
-    // In production (same domain), use relative path
-    // In development, use localhost
-    const serverUrl = import.meta.env.VITE_SERVER_URL || 
-                      (import.meta.env.PROD ? window.location.origin : 'http://localhost:5000');
+    // Get backend URL - must be set in Vercel environment variables
+    const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
+    
+    // Log for debugging
+    if (import.meta.env.PROD) {
+      console.log('Socket URL:', serverUrl);
+      if (!import.meta.env.VITE_SERVER_URL) {
+        console.warn('⚠️ VITE_SERVER_URL not set! Socket.io will fail. Please set it in Vercel.');
+      }
+    }
     
     try {
       const newSocket = io(serverUrl, {

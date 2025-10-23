@@ -2,9 +2,16 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import axios from 'axios';
 
-// Get API URL - use environment variable or relative path in production
-const API_URL = import.meta.env.VITE_SERVER_URL || 
-                (import.meta.env.PROD ? window.location.origin : 'http://localhost:5000');
+// Get API URL - must be set in Vercel environment variables
+const API_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
+
+// Log the API URL for debugging in production
+if (import.meta.env.PROD) {
+  console.log('API URL:', API_URL);
+  if (!import.meta.env.VITE_SERVER_URL) {
+    console.warn('⚠️ VITE_SERVER_URL not set! API calls will fail. Please set it in Vercel environment variables.');
+  }
+}
 
 // Configure axios defaults
 axios.defaults.baseURL = API_URL;

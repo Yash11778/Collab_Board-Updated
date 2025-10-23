@@ -17,10 +17,12 @@ function Home() {
     const fetchBoards = async () => {
       try {
         const response = await axios.get('/api/boards');
-        setBoards(response.data);
+        // Ensure we always have an array
+        setBoards(Array.isArray(response.data) ? response.data : []);
       } catch (err) {
         console.error('Error fetching boards:', err);
         setError('Failed to load boards. Please try again later.');
+        setBoards([]); // Set empty array on error
       } finally {
         setLoading(false);
       }
@@ -81,6 +83,14 @@ function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="container mx-auto px-6 py-8">
+        {/* Show warning if backend URL not configured */}
+        {import.meta.env.PROD && !import.meta.env.VITE_SERVER_URL && (
+          <div className="mb-6 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+            <p className="font-bold">⚠️ Backend Not Connected</p>
+            <p className="text-sm">VITE_SERVER_URL environment variable is not set in Vercel. Please add it in your project settings.</p>
+          </div>
+        )}
+        
         <header className="mb-12 text-center">
           <h1 className="text-5xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 animate-pulse">
             Welcome to CollabBoard
