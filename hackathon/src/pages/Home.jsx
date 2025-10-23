@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaPlus, FaUserCheck } from 'react-icons/fa';
 import axios from 'axios';
 import { useAuthStore } from '../store/authStore';
+import BackendTest from '../components/BackendTest';
 
 function Home() {
   const [boards, setBoards] = useState([]);
@@ -188,6 +189,9 @@ function Home() {
           )}
         </div>
       </div>
+      
+      {/* Backend Test Component */}
+      <BackendTest />
     </div>
   );
 }
